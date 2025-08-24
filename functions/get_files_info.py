@@ -22,7 +22,7 @@ def get_files_info(working_directory, directory="."):
             if item.is_dir():
                 size = get_dir_size(item)
             results.append(f" - {name}: file_size={size} bytes, is_dir={is_dir}")   
-        return results             
+        return "\n".join(results)             
     except Exception as e:
         raise Exception(f"Error: {e}")
 
