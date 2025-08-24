@@ -1,4 +1,5 @@
 from pathlib import Path
+from google.genai import types
 
 def write_file(working_directory, file_path, content):
     try:
@@ -17,3 +18,21 @@ def write_file(working_directory, file_path, content):
 
     except Exception as e:
         raise Exception(f"Error: {e}")    
+
+schema_write_file = types.FunctionDeclaration(
+    name="write_file",
+    description="Overwrites a file in the target directory. If the file does not exist, creates the files and any directories needed. Constrained to the working directory.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The file to which content will be written (including the file extension), relative to the working directory. Assume info given is proper format."
+            ),
+            "content": types.Schema(
+                type=types.Type.STRING,
+                description="The text to write to the created/targeted file. Will completely erase target file (or create completely blank file) if left blank. If not given, default to empty string."
+            )
+        }
+    )
+)         

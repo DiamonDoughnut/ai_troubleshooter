@@ -1,6 +1,7 @@
-from pathlib import Path
 import sys
 import subprocess
+from google.genai import types
+from pathlib import Path
 
 def run_python_file(working_directory, file_path, args=[]):
     working_dir = Path(working_directory).resolve()
@@ -48,3 +49,22 @@ def run_python_file(working_directory, file_path, args=[]):
 
     except Exception as e:
         raise Exception(f"Error: executing Python file: {e}")        
+
+schema_run_python_file = types.FunctionDeclaration(
+    name="run_python_file",
+    description="Runs a python script at the specified file path with an optional list of arguments and prints out any response returned by that function. Constrained to the working directory.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The location of the target Python script, relative to the working directory. Assume given information is proper relative path. If no script arguments are given, assume none are needed: do not ask for any."
+            ),
+            "args": types.Schema(
+                type=types.Type.ARRAY,
+                items=types.Schema(type=types.Type.STRING),
+                description="An array of strings, each being a separate argument to be passed into the target Python script in order. If none given, run without this variable."
+            )
+        }
+    )
+)         
